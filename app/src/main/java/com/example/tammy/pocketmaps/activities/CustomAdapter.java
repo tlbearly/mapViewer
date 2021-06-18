@@ -122,7 +122,7 @@ public class CustomAdapter extends BaseAdapter {
         String filePath;
         PDFMap pdfMap;
 
-        ImportMapTask(CustomAdapter context, PDFMap pdfMap, ProgressBar pb) {
+        public ImportMapTask(CustomAdapter context, PDFMap pdfMap, ProgressBar pb) {
             // calls onPreExecute
             // only retain a weak reference to the CustomAdapter class
             customAdapterRef = new WeakReference<>(context);
@@ -145,7 +145,7 @@ public class CustomAdapter extends BaseAdapter {
             // get a reference to the CustomAdapter if it is still there
             CustomAdapter caRef = customAdapterRef.get();
             Activity activity = (Activity) caRef.c;
-            if (caRef == null || activity.isFinishing()) return;
+            if (activity.isFinishing()) return;
 
             caRef.loading = true;
             // calls doInBackground
@@ -174,7 +174,7 @@ public class CustomAdapter extends BaseAdapter {
             // get a reference to the CustomAdapter if it is still there
             CustomAdapter caRef = customAdapterRef.get();
             Activity activity = (Activity) caRef.c;
-            if (caRef == null || activity.isFinishing()) return "";
+            if (activity.isFinishing()) return "";
             Context c = caRef.c;
 
             // preform background computation
@@ -210,8 +210,6 @@ public class CustomAdapter extends BaseAdapter {
             //<</Size 82/Root 5 0 R/Info 3 0 R/ID[<481274B989C1D7419BA9E71CBA227123><D6AEE54D32AC354E980F653350D6C962>]/Prev 2874274>>
             try {
                 PdfReader reader = new PdfReader(filePath);
-                if (reader == null) return ("Import Failed");
-
                 //int numPages = reader.getNumberOfPages();
 
                 PdfDictionary page = reader.getPageN(1);
@@ -229,7 +227,7 @@ public class CustomAdapter extends BaseAdapter {
                 // Get MediaBox page size
                 //--------------------------
                 mediabox = page.getAsArray(PdfName.MEDIABOX).toString(); // works [ 0 0 792 1224]
-                if (mediabox == null) return ("Import Failed");
+                if (mediabox.length() < 1) return ("Import Failed");
                 mediabox = mediabox.substring(1,mediabox.length()-1).trim();
                 mediabox = mediabox.replaceAll(",","");
                 publishProgress(20);
@@ -312,12 +310,12 @@ public class CustomAdapter extends BaseAdapter {
 
 
                     bounds = measure.get(PdfName.GPTS).toString();
-                    if (bounds == null) return ("Import Failed");
+                    if (bounds.length() < 1) return ("Import Failed");
                     bounds = bounds.trim();
                     bounds = bounds.substring(1, bounds.length() - 1);
                     bounds = bounds.replaceAll(",", "");
-                    String[] latlong;
-                    latlong = bounds.split(" ");
+                    //String[] latlong;
+                    //latlong = bounds.split(" ");
                     // Test - not working! adjusted with the unit square - gives the correct lat long for BBox
                     // bottom-left lat/long (given long + (height or width in decimal degrees) * unit square value
                    /* double lat1 = Double.parseDouble(latlong[0]) + (Double.parseDouble(latlong[2]) - Double.parseDouble(latlong[0])) * Double.parseDouble(units[0]);
@@ -437,7 +435,7 @@ public class CustomAdapter extends BaseAdapter {
                         v1 = v2;
                         v2 = tmp;
                     }
-                    viewport = Integer.toString(h1) + " " + Integer.toString(v1) + " " + Integer.toString(h2) + " " + Integer.toString(v2);
+                    viewport = h1 + " " + v1 + " " + h2 + " " + v2;
                     publishProgress(20);
 
                     // Get Latitude/Longitude Bounds = lat1 long1 lat2 long1 lat2 long2 lat1 long2
@@ -781,9 +779,9 @@ public class CustomAdapter extends BaseAdapter {
     }
 
     // return array of pdfMaps so that we do not need to get DBHandler or DBWayPtHander here 5-27-21
-    public ArrayList<PDFMap> getPdfMaps() {
+    /*public ArrayList<PDFMap> getPdfMaps() {
         return pdfMaps;
-    }
+    }*/
 
     public void add(PDFMap pdfMap) {
         pdfMaps.add(pdfMap);
@@ -843,7 +841,7 @@ public class CustomAdapter extends BaseAdapter {
                 PDFMap map = pdfMaps.get(i);
                 Toast.makeText(c,"Deleting: "+map.getName(), Toast.LENGTH_LONG).show();
                 File f = new File(map.getPath());
-                if (f != null || f.exists()) {
+                if (f.exists()) {
                     boolean deleted = f.delete();
                     if (!deleted) {
                         Toast.makeText(c, c.getResources().getString(R.string.deleteFile), Toast.LENGTH_LONG).show();
@@ -853,7 +851,7 @@ public class CustomAdapter extends BaseAdapter {
                 pdfMaps.remove(i);
                 // delete thumbnail image also
                 File img = new File(map.getThumbnail());
-                if (img != null || img.exists()) {
+                if (img.exists()) {
                     boolean deleted = img.delete();
                     if (!deleted) {
                         Toast.makeText(c, c.getResources().getString(R.string.deleteThumbnail), Toast.LENGTH_LONG).show();
@@ -878,7 +876,7 @@ public class CustomAdapter extends BaseAdapter {
                 if (pdfMaps.get(i).getId() == id) {
                     PDFMap map = pdfMaps.get(i);
                     File f = new File(map.getPath());
-                    if (f != null || f.exists()) {
+                    if (f.exists()) {
                         boolean deleted = f.delete();
                         if (!deleted) {
                             Toast.makeText(c, c.getResources().getString(R.string.deleteFile), Toast.LENGTH_LONG).show();
@@ -892,7 +890,7 @@ public class CustomAdapter extends BaseAdapter {
                     String imgPath = map.getThumbnail();
                     if (imgPath != null) {
                         File img = new File(imgPath);
-                        if (img != null || img.exists()) {
+                        if (img.exists()) {
                             boolean deleted = img.delete();
                             if (!deleted) {
                                 Toast.makeText(c, c.getResources().getString(R.string.deleteThumbnail), Toast.LENGTH_LONG).show();

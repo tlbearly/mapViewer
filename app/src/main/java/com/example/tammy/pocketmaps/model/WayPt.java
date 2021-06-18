@@ -9,15 +9,13 @@ import java.util.Locale;
 public class WayPt {
     // Holds one way point
     private int id;
-    private String name = ""; // pdf map name
-    private String desc = ""; // description
-    private float x = 0; // x screen coordinate
-    private float y = 0; // y screen coordinate
+    private String name; // pdf map name
+    private String desc; // description
+    private final float x; // x screen coordinate
+    private final float y; // y screen coordinate
     private String time; // date and time way pt was created
     private String location; // lat, long
     private String colorName; //  color of push pin image
-
-    public WayPt(){}
 
     public WayPt(String name, String desc, float x, float y, String colorName, String location){
         this.name = name;
@@ -95,14 +93,6 @@ public class WayPt {
         this.colorName = colorName;
     }
 
-    public void setX(float x) {
-        this.x = x;
-    }
-
-    public void setY(float y) {
-        this.y = y;
-    }
-
     public void setLocation(String location) {
         this.location = location;
     }
@@ -116,8 +106,6 @@ public class WayPt {
         float y1 = p1.getY();
         float y2 = p2.getY();
         // Return descending order
-        if (y1 < y2) return 1;
-        else if (y1 == y2) return 0;
-        else return -1;
+        return Float.compare(y2, y1);
     };
 }

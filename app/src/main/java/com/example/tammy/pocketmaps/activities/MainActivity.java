@@ -272,6 +272,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     @Override
     protected void onResume() {
         super.onResume();
+        Log.d("MainActivity", "onResume");
         fillList(); // get maps list from database
         // Start Location Services
         if ((ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) &&
@@ -280,7 +281,6 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         }
         // Update myAdapter list and database if import/rename/delete happened
         checkForActivityResult();
-        Log.d("MainActivity", "onResume");
     }
 
 

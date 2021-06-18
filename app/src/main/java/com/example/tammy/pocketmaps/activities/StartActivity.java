@@ -22,6 +22,8 @@ import static androidx.appcompat.app.AlertDialog.Builder;
 
 /**
  * Start the app, display splash screen and check for permissions and location services
+ * FS https://www.arcgis.com/apps/webappviewer/index.html?id=b70e11a68aac46b3a5bd911b82b53c1e
+ * USGS https://apps.nationalmap.gov/viewer/
  */
 public class StartActivity extends AppCompatActivity {
 

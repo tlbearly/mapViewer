@@ -85,8 +85,8 @@ public class GetMoreActivity extends AppCompatActivity {
                         fileNotFoundException.printStackTrace();
                         Toast.makeText(GetMoreActivity.this, getResources().getString(R.string.createFile), Toast.LENGTH_LONG).show();
                     }
-                    outFile.setWritable(true, true); // ownerOnly was false(world write permissions!) always returns false???? but works
-                    //if (!ok){
+                    Boolean result = outFile.setWritable(true, true); // ownerOnly was false(world write permissions!) always returns false???? but works
+                    //if (!result){
                     //    Toast.makeText(GetMoreActivity.this,getResources().getString(R.string.writePermission), Toast.LENGTH_LONG).show();
                     //}
                     // Copy the file from file picker to app directory. Don't delete the original.
@@ -181,7 +181,6 @@ public class GetMoreActivity extends AppCompatActivity {
             // To search for all documents available via installed storage providers,
             // it would be "*/*".
             //intent.setType("application/pdf");
-            // TODO: deprecated startActivityForResult
             //startActivityForResult (intent, READ_REQUEST_CODE);
             mGetContent.launch("application/pdf");
         });
